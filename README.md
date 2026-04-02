@@ -1,4 +1,11 @@
-todo:
+### Build
+
+build project with `make`, and run it with `./pixels`
+
+delete build with `make clean`
+
+
+### todo:
 
 physics
 
