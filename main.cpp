@@ -22,6 +22,10 @@ int main() {
     write_stats_particles();
     write_stats_tps();
 
+    State::get().activeParticles++;
+
+    draw_grid();
+
     write_cmd_buffer(cmd_buffer);
     cout << flush;
 

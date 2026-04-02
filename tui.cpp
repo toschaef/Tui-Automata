@@ -14,6 +14,9 @@ const string ALT_SCREEN_OFF = ESCAPE + "?1049l";
 const string HIDE_CURSOR = ESCAPE + "?25l";
 const string SHOW_CURSOR = ESCAPE + "?25h";
 
+const string ENABLE_MOUSE = ESCAPE + "?1003h" + ESCAPE + "?1006h";
+const string DISABLE_MOUSE = ESCAPE + "?1006l" + ESCAPE + "?1003l";
+
 int termWidth, termHeight;
 int bottomHeight;
 int simHeight;
@@ -82,6 +85,11 @@ void init_heights() {
 
   statsWidth = 25;
   cmdWidth = termWidth - statsWidth;
+
+  // init grid dimensions
+  State::get().gridWidth = termWidth - 2;
+  State::get().gridHeight = (simHeight - 2) * 2;
+  State::get().grid.assign(State::get().gridWidth * State::get().gridHeight, Element::Empty);
 }
 
 void draw_rectangle(int x, int y, int w, int h, const string& title) {
@@ -123,7 +131,7 @@ int init_tui() {
     return -1;
   }
 
-  cout << ALT_SCREEN_ON << HIDE_CURSOR << CLEAR_SCREEN;
+  cout << ALT_SCREEN_ON << HIDE_CURSOR << CLEAR_SCREEN << ENABLE_MOUSE;
 
   // draw layout
   draw_rectangle(1, 1, termWidth, simHeight, "");
@@ -146,7 +154,7 @@ int init_tui() {
 }
 
 void cleanup_tui() {
-  cout << SHOW_CURSOR << ALT_SCREEN_OFF << flush;
+  cout << SHOW_CURSOR << ALT_SCREEN_OFF << DISABLE_MOUSE << flush;
   disable_raw_mode();
 }
 
@@ -159,4 +167,47 @@ void write_cmd_buffer(const string& cmd) {
   int spaces_to_clear = max_chars - cmd.length();
   for (int i = 0; i < spaces_to_clear; ++i)
     cout << " ";
+}
+
+/*
+  grid rendering
+*/
+
+int get_color(Element e) {
+  switch(e) {
+    case Element::Stone: return 244;
+    case Element::Water: return 39;
+    case Element::Lava:  return 196;
+    case Element::Steam: return 253;
+    case Element::Empty: return 0;
+    default: return 0;
+  }
+}
+
+void draw_grid() {
+
+  for (int y = 0; y < simHeight - 2; ++y) {
+    move_cursor(2, y + 2); 
+
+    for (int x = 0; x < termWidth - 2; ++x) {
+      int gridX = x;
+      int gridY_top = y * 2;
+      int gridY_bottom = (y * 2) + 1;
+
+      Element topPixel = State::get().get_pixel(gridX, gridY_top);
+      Element bottomPixel = State::get().get_pixel(gridX, gridY_bottom);
+
+      if (topPixel == Element::Empty && bottomPixel == Element::Empty) {
+        cout << "\033[0m ";
+        continue;
+      }
+
+      int topColor = get_color(topPixel);
+      int bottomColor = get_color(bottomPixel);
+
+      cout << "\033[38;5;" << bottomColor << ";48;5;" << topColor << "m▄";
+    }
+  }
+
+  cout << "\033[0m"; 
 }

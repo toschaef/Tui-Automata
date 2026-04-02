@@ -17,3 +17,5 @@ void write_stats_particles();
 void write_stats_brush();
 
 void write_cmd_buffer(const std::string& cmd);
+
+void draw_grid();
