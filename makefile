@@ -2,9 +2,9 @@ CXX = g++
 
 CXXFLAGS = -Wall -std=c++17
 
-TARGET = voxel_engine
+TARGET = pixels
 
-SRCS = main.cpp tui.cpp
+SRCS = main.cpp tui.cpp input.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

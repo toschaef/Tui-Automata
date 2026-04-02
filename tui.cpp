@@ -153,8 +153,10 @@ void cleanup_tui() {
 void write_cmd_buffer(const string& cmd) {
   move_cursor_cmd();
 
+  cout << cmd;
+
   int max_chars = cmdWidth - 5; 
   int spaces_to_clear = max_chars - cmd.length();
   for (int i = 0; i < spaces_to_clear; ++i)
-      cout << " ";
+    cout << " ";
 }

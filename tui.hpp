@@ -1,5 +1,11 @@
 #pragma once
 
+extern int termWidth, termHeight;
+extern int bottomHeight;
+extern int simHeight;
+extern int statsWidth;
+extern int cmdWidth;
+
 int init_tui();
 void cleanup_tui();
 
