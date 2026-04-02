@@ -33,8 +33,11 @@ void process_input(bool& running, string& cmd_buffer) {
           stringstream ss(mouse_data);
           ss >> cb >> cx >> cy >> end_char;
 
-          int gridX = cx - 1;
-          int gridY = (cy - 1) * 2; 
+          State::get().mouseX = cx;
+          State::get().mouseY = cy;
+
+          int gridX = cx - 2;
+          int gridY = (cy - 2) * 2; 
 
           if ((cb == 0 || cb == 32) && end_char == 'M') {
             if (cy <= simHeight) {

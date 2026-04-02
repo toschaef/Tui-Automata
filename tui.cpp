@@ -197,13 +197,20 @@ void draw_grid() {
       Element topPixel = State::get().get_pixel(gridX, gridY_top);
       Element bottomPixel = State::get().get_pixel(gridX, gridY_bottom);
 
-      if (topPixel == Element::Empty && bottomPixel == Element::Empty) {
+      bool isHovered = (State::get().mouseX == x + 2) && (State::get().mouseY == y + 2);
+
+      if (topPixel == Element::Empty && bottomPixel == Element::Empty && !isHovered) {
         cout << "\033[0m ";
         continue;
       }
 
       int topColor = get_color(topPixel);
       int bottomColor = get_color(bottomPixel);
+
+      if (isHovered) {
+        if (topColor == 0) topColor = 236;
+        if (bottomColor == 0) bottomColor = 236;
+      }
 
       cout << "\033[38;5;" << bottomColor << ";48;5;" << topColor << "m▄";
     }
