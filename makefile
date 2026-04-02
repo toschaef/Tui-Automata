@@ -4,7 +4,7 @@ CXXFLAGS = -Wall -std=c++17
 
 TARGET = pixels
 
-SRCS = main.cpp tui.cpp input.cpp
+SRCS = main.cpp tui.cpp input.cpp timer.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

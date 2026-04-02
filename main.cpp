@@ -4,6 +4,7 @@
 #include "tui.hpp"
 #include "state.hpp"
 #include "input.hpp"
+#include "timer.hpp"
 
 using namespace std;
 
@@ -13,9 +14,13 @@ int main() {
   }
 
   bool running = true;
-  string cmd_buffer = ""; 
+  string cmd_buffer = "";
+
+  init_timer();
 
   while(running) {
+    start_frame();
+
     process_input(running, cmd_buffer);
 
     write_stats_brush();
@@ -29,7 +34,7 @@ int main() {
     write_cmd_buffer(cmd_buffer);
     cout << flush;
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(33)); // replace with delta time later
+    end_frame();
   }
 
   cleanup_tui();

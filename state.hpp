@@ -4,7 +4,9 @@
 
 class State {
 public:
-  int tps = 30;
+  int targetTps = 150;
+  int actualTps = targetTps;
+
   int activeParticles = 0;
   Element currentBrush = Element::Stone;
 

@@ -54,7 +54,7 @@ void write_stats_tps() {
   cout << "      ";
 
   move_cursor(cmdWidth + 8, simHeight + 3);
-  cout << State::get().tps;
+  cout << State::get().actualTps;
 }
 
 void write_stats_particles() {
@@ -121,30 +121,6 @@ void draw_rectangle(int x, int y, int w, int h, const string& title) {
   for (int i = 0; i < w - 2; ++i)
     cout << "─";
   cout << "┘";
-}
-
-void draw_line(int x0, int y0, int x1, int y1, Element brush) {
-  int dx = abs(x1 - x0);
-  int sx = x0 < x1 ? 1 : -1;
-  int dy = -abs(y1 - y0);
-  int sy = y0 < y1 ? 1 : -1;
-  int err = dx + dy; 
-
-  while (true) {
-    if (brush == Element::Stone) {
-      State::get().set_pixel(x0, y0, brush);
-      State::get().set_pixel(x0, y0 + 1, brush);
-    } else {
-      State::get().set_pixel(x0, y0, brush);
-    }
-
-    // stop when target reached
-    if (x0 == x1 && y0 == y1) break;
-    
-    int e2 = 2 * err;
-    if (e2 >= dy) { err += dy; x0 += sx; }
-    if (e2 <= dx) { err += dx; y0 += sy; }
-  }
 }
 
 int init_tui() {
@@ -241,4 +217,28 @@ void draw_grid() {
   }
 
   cout << "\033[0m"; 
+}
+
+void draw_line(int x0, int y0, int x1, int y1, Element brush) {
+  int dx = abs(x1 - x0);
+  int sx = x0 < x1 ? 1 : -1;
+  int dy = -abs(y1 - y0);
+  int sy = y0 < y1 ? 1 : -1;
+  int err = dx + dy; 
+
+  while (true) {
+    // if (brush == Element::Stone) {
+    //   State::get().set_pixel(x0, y0, brush);
+    //   State::get().set_pixel(x0, y0 + 1, brush);
+    // } else {
+      State::get().set_pixel(x0, y0, brush);
+    // }
+
+    // stop when target reached
+    if (x0 == x1 && y0 == y1) break;
+    
+    int e2 = 2 * err;
+    if (e2 >= dy) { err += dy; x0 += sx; }
+    if (e2 <= dx) { err += dx; y0 += sy; }
+  }
 }
