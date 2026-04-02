@@ -1,4 +1,5 @@
 #pragma once
+#include "element.hpp"
 
 extern int termWidth, termHeight;
 extern int bottomHeight;
@@ -19,3 +20,4 @@ void write_stats_brush();
 void write_cmd_buffer(const std::string& cmd);
 
 void draw_grid();
+void draw_line(int x0, int y0, int x1, int y1, Element brush);

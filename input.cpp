@@ -1,6 +1,6 @@
-#include "input.hpp"
 #include <unistd.h>
 #include <sstream>
+#include <cmath>
 #include "state.hpp"
 #include "tui.hpp"
 
@@ -40,17 +40,28 @@ void process_input(bool& running, string& cmd_buffer) {
           int gridY = (cy - 2) * 2; 
 
           if ((cb == 0 || cb == 32) && end_char == 'M') {
-            if (cy <= simHeight) {
+            
+            if (gridX >= 0 && gridX < State::get().gridWidth && cy > 1 && cy < simHeight) {
               Element brush = State::get().currentBrush;
 
-              if (brush == Element::Stone) {
-                State::get().set_pixel(gridX, gridY, brush);
-                State::get().set_pixel(gridX, gridY + 1, brush);
+              if (cb == 0) { 
+                draw_line(gridX, gridY, gridX, gridY, brush);
+              } 
+              else if (cb == 32) { 
+                if (State::get().lastGridX != -1) {
+                  draw_line(State::get().lastGridX, State::get().lastGridY, gridX, gridY, brush);
+                } else {
+                  draw_line(gridX, gridY, gridX, gridY, brush);
+                }
               }
-              else {
-                State::get().set_pixel(gridX, gridY, brush);
-              }
+
+              State::get().lastGridX = gridX;
+              State::get().lastGridY = gridY;
             }
+          } 
+          else {
+            State::get().lastGridX = -1;
+            State::get().lastGridY = -1;
           }
         }
       }

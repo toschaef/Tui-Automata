@@ -12,8 +12,13 @@ public:
   int gridHeight = 0;
   std::vector<Element> grid;
 
+  // current mouse coords
   int mouseX = -1;
   int mouseY = -1;
+
+  // last know mouse coords
+  int lastGridX = -1;
+  int lastGridY = -1;
 
   Element get_pixel(int x, int y) {
     if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) return Element::NONE;
